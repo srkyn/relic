@@ -1,0 +1,113 @@
+<svg viewBox="0 0 900 210" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="relic project banner">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#1A2A1A"/>
+      <stop offset="100%" stop-color="#1E3A2A"/>
+    </linearGradient>
+    <linearGradient id="termgrad" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#0D1A0D"/>
+      <stop offset="100%" stop-color="#0A1510"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Background -->
+  <rect width="900" height="210" fill="url(#bg)"/>
+
+  <!-- Subtle dot texture -->
+  <g fill="#FFFFFF" opacity="0.03">
+    <circle cx="50" cy="25" r="1.5"/><circle cx="120" cy="60" r="1"/><circle cx="210" cy="30" r="1.5"/>
+    <circle cx="290" cy="50" r="1"/><circle cx="370" cy="18" r="1.5"/><circle cx="440" cy="65" r="1"/>
+    <circle cx="70" cy="90" r="1"/><circle cx="155" cy="115" r="1.5"/><circle cx="250" cy="95" r="1"/>
+    <circle cx="330" cy="130" r="1"/><circle cx="40" cy="165" r="1.5"/><circle cx="180" cy="180" r="1"/>
+    <circle cx="310" cy="160" r="1.5"/><circle cx="400" cy="185" r="1"/><circle cx="100" cy="195" r="1.5"/>
+  </g>
+
+  <!-- Left accent bar — muted green -->
+  <rect x="0" y="0" width="5" height="210" fill="#4ADE80" opacity="0.7"/>
+
+  <!-- Title -->
+  <text x="32" y="72" font-family="'Courier New', Courier, monospace" font-size="54"
+        font-weight="bold" fill="#FFFFFF">relic</text>
+
+  <!-- Subtitle -->
+  <text x="33" y="100" font-family="'Courier New', Courier, monospace" font-size="13"
+        fill="#6B8F6B" letter-spacing="0.5">on-premises Active Directory auditor</text>
+
+  <!-- Badges -->
+  <g font-family="'Courier New', Courier, monospace" font-size="10">
+    <rect x="33" y="115" width="78" height="16" rx="3" fill="#1A3A1A"/>
+    <text x="42" y="127" fill="#6B8F6B">python</text>
+    <text x="75" y="127" fill="#4ADE80">3.8+</text>
+
+    <rect x="118" y="115" width="60" height="16" rx="3" fill="#1A3A1A"/>
+    <text x="127" y="127" fill="#6B8F6B">ldap3</text>
+    <text x="158" y="127" fill="#4ADE80">✓</text>
+
+    <rect x="185" y="115" width="52" height="16" rx="3" fill="#1A3A1A"/>
+    <text x="194" y="127" fill="#6B8F6B">MIT</text>
+    <text x="214" y="127" fill="#4ADE80">✓</text>
+  </g>
+
+  <!-- Terminal window -->
+  <rect x="470" y="18" width="415" height="172" rx="6" fill="url(#termgrad)" stroke="#1A3A1A" stroke-width="1.5"/>
+
+  <!-- Terminal title bar -->
+  <rect x="470" y="18" width="415" height="24" rx="6" fill="#111A11"/>
+  <rect x="470" y="30" width="415" height="12" fill="#111A11"/>
+  <circle cx="490" cy="30" r="5" fill="#FF5F57"/>
+  <circle cx="506" cy="30" r="5" fill="#FEBC2E"/>
+  <circle cx="522" cy="30" r="5" fill="#28C840"/>
+  <text x="548" y="34" font-family="'Courier New', Courier, monospace" font-size="10" fill="#3A5A3A">relic --server dc01.corp.local --domain corp.local --only-flagged</text>
+
+  <!-- Terminal content -->
+  <g font-family="'Courier New', Courier, monospace" font-size="10">
+    <!-- Header -->
+    <text x="482" y="60" fill="#3A5A3A">Name                  Type            Last Logon   Days  Risk    Reason</text>
+    <text x="482" y="72" fill="#1A3A1A">──────────────────────────────────────────────────────────────────────</text>
+
+    <!-- HIGH row -->
+    <rect x="480" y="75" width="398" height="16" rx="2" fill="#4ADE80" opacity="0.08"/>
+    <text x="482" y="87" fill="#E2E8F0">svc_backup</text>
+    <text x="572" y="87" fill="#CBD5E1">service_account</text>
+    <text x="672" y="87" fill="#CBD5E1">2023-11-04</text>
+    <text x="738" y="87" fill="#CBD5E1">547</text>
+    <text x="768" y="87" fill="#F87171" font-weight="bold">HIGH</text>
+    <text x="802" y="87" fill="#94A3B8">SPN pwd 547d — Kerberoast</text>
+
+    <!-- HIGH row 2 -->
+    <rect x="480" y="91" width="398" height="16" rx="2" fill="#4ADE80" opacity="0.05"/>
+    <text x="482" y="103" fill="#E2E8F0">jsmith.old</text>
+    <text x="572" y="103" fill="#CBD5E1">user</text>
+    <text x="672" y="103" fill="#CBD5E1">2024-01-17</text>
+    <text x="738" y="103" fill="#CBD5E1">473</text>
+    <text x="768" y="103" fill="#F87171" font-weight="bold">HIGH</text>
+    <text x="802" y="103" fill="#94A3B8">disabled, holds 3 groups</text>
+
+    <!-- MEDIUM row -->
+    <text x="482" y="119" fill="#94A3B8">WORKSTATION-04</text>
+    <text x="572" y="119" fill="#4A6B4A">computer</text>
+    <text x="672" y="119" fill="#4A6B4A">2024-06-02</text>
+    <text x="738" y="119" fill="#4A6B4A">337</text>
+    <text x="768" y="119" fill="#FEBC2E">MED</text>
+    <text x="802" y="119" fill="#4A6B4A">inactive 337 days</text>
+
+    <!-- Separator -->
+    <text x="482" y="134" fill="#1A3A1A">──────────────────────────────────────────────────────────────────────</text>
+
+    <!-- Summary -->
+    <text x="482" y="152" fill="#3A5A3A">Found </text>
+    <text x="511" y="152" fill="#E2E8F0">214</text>
+    <text x="527" y="152" fill="#3A5A3A"> objects — </text>
+    <text x="574" y="152" fill="#F87171">18 HIGH</text>
+    <text x="614" y="152" fill="#3A5A3A">, </text>
+    <text x="620" y="152" fill="#FEBC2E">43 MEDIUM</text>
+    <text x="669" y="152" fill="#3A5A3A">, 153 LOW.</text>
+
+    <!-- Dry run -->
+    <text x="482" y="168" fill="#3A5A3A">Dry run: no changes made.</text>
+    <text x="636" y="168" fill="#4ADE80">✓</text>
+  </g>
+
+  <!-- Bottom accent strip -->
+  <rect x="0" y="198" width="900" height="12" fill="#4ADE80" opacity="0.5"/>
+</svg>

@@ -1,0 +1,136 @@
+![relic project banner](docs/assets/relic-banner.svg)
+
+# relic
+
+Surface stale and orphaned objects in on-premises Active Directory.
+
+Active Directory environments accumulate objects that nobody is actively managing. Users leave, their accounts stay. Service accounts outlive the projects that created them. Workstations get decommissioned but their computer objects stay in the directory, still in scope for group policy and still appearing in security group memberships. relic connects to a domain controller over LDAP and tells you what's there, how old it is, and what risk it carries.
+
+![Release](https://img.shields.io/github/v/release/srkyn/relic?style=flat-square)
+![CI](https://img.shields.io/github/actions/workflow/status/srkyn/relic/ci.yml?branch=main&style=flat-square)
+![Python](https://img.shields.io/badge/python-3.8%2B-1f6feb?style=flat-square)
+![License](https://img.shields.io/github/license/srkyn/relic?style=flat-square)
+
+## What It Finds
+
+**Stale computer accounts** — computers that have not authenticated since the threshold. Computer accounts authenticate when the machine starts and periodically during operation. A computer that has been silent for months either no longer exists or is no longer receiving policy.
+
+**Dormant user accounts** — users who have not logged in within the threshold window. Includes service accounts identified by the presence of `servicePrincipalName`.
+
+**Disabled accounts with group memberships** — the most immediately actionable finding. The account is already disabled, but its group memberships are still live. Removing them carries no operational risk and closes a re-enablement path.
+
+**Accounts with non-expiring passwords** — `DONT_EXPIRE_PASSWORD` set in `userAccountControl`. Flagged on its own as MEDIUM; escalates to HIGH when the account is also stale.
+
+**Service accounts with aging passwords** — accounts with SPNs whose `pwdLastSet` is older than the threshold are flagged as Kerberoasting exposure. A service account with an SPN and a multi-year-old password is a target regardless of whether the account appears active.
+
+## Risk Levels
+
+| Condition | Severity |
+|---|---|
+| Disabled account still holds group memberships | HIGH |
+| Service account (SPN), password unchanged >365 days | HIGH |
+| Computer account inactive >365 days | HIGH |
+| Non-expiring password + inactive >180 days | HIGH |
+| Stale user or computer account | MEDIUM |
+| Non-expiring password (active account) | MEDIUM |
+| Disabled account, no group memberships | MEDIUM |
+| Service account password unchanged >90 days | MEDIUM |
+
+## Usage
+
+```bash
+# Full scan — all object types
+relic --server dc01.corp.local --domain corp.local
+
+# Show only HIGH and MEDIUM findings
+relic --server dc01.corp.local --domain corp.local --only-flagged
+
+# Adjust the inactivity threshold
+relic --server dc01.corp.local --domain corp.local --days 180
+
+# Target specific object types
+relic --server dc01.corp.local --domain corp.local --users --disabled
+
+# Write reports
+relic --server dc01.corp.local --domain corp.local --output results.json --output-csv results.csv
+
+# Use LDAPS and an explicit base DN
+relic --server dc01.corp.local --ssl --base-dn "DC=corp,DC=local"
+
+# Disable flagged objects (dry run first)
+relic --server dc01.corp.local --domain corp.local --disable --dry-run
+relic --server dc01.corp.local --domain corp.local --disable
+```
+
+## Authentication
+
+```bash
+# Simple bind (username + password)
+relic --server dc01.corp.local --domain corp.local \
+      --username svc_relic --password <pass>
+
+# NTLM
+relic --server dc01.corp.local \
+      --username "CORP\svc_relic" --password <pass> \
+      --base-dn "DC=corp,DC=local"
+```
+
+LDAPS (`--ssl` or `--port 636`) is recommended to avoid transmitting credentials in cleartext.
+
+## Scan Flags
+
+| Flag | What it scans |
+|---|---|
+| *(default — no flags)* | All object types |
+| `--users` | Dormant user accounts |
+| `--computers` | Stale computer accounts |
+| `--disabled` | Disabled accounts with group memberships |
+| `--never-expires` | Accounts with non-expiring passwords |
+
+## Output Fields
+
+JSON and CSV output includes: `name`, `type`, `dn`, `last_logon_str`, `age_days`, `pwd_age_days`, `disabled`, `never_expires`, `group_count`, `risk`, `risk_reasons`, `os`, `description`.
+
+## Installation
+
+```bash
+git clone https://github.com/srkyn/relic.git
+cd relic
+pip install .
+relic --version
+```
+
+Or run directly:
+
+```bash
+pip install ldap3 tabulate
+python relic.py --server dc01.corp.local --domain corp.local --dry-run
+```
+
+## Comparison to lapse
+
+relic and [lapse](https://github.com/srkyn/lapse) solve the same class of problem in different environments. lapse targets Entra ID (cloud) via Microsoft Graph API. relic targets on-premises Active Directory via LDAP. Between them they cover identity hygiene across both environments.
+
+## Files
+
+- `relic.py`: the scanner
+- `tests/test_relic.py`: unit tests (48 cases)
+- `docs/design-notes.md`: implementation details and limitations
+- `CHANGELOG.md`: release history
+
+## Limitations
+
+- `lastLogonTimestamp` replication lag means age readings may be off by up to 14 days.
+- Does not evaluate nested group membership chains.
+- Does not parse password policy to determine actual expiry status.
+- Does not support Kerberos/GSSAPI authentication.
+- May miss objects in OUs the bind account cannot read.
+- Read-only except when `--disable` is used.
+
+## Testing
+
+```bash
+python -m py_compile relic.py
+python -m unittest discover -s tests -v
+relic --version
+```
