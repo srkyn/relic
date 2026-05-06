@@ -32,7 +32,7 @@ The risk is concrete. A disabled account that still holds membership in privileg
 
 ## Authentication
 
-relic uses `ldap3` with simple bind or NTLM authentication. LDAPS (port 636, `--ssl`) is recommended for production use to avoid transmitting bind credentials in cleartext. Kerberos/GSSAPI authentication is not currently supported but is a natural follow-on for environments where tickets are available.
+relic uses `ldap3` with simple bind or NTLM authentication. LDAPS (port 636, `--ssl`) is recommended for production use to avoid transmitting bind credentials in cleartext. Prefer `--password-env` or `--password-stdin` so bind passwords do not remain in shell history or process listings. Kerberos/GSSAPI authentication is not currently supported but is a natural follow-on for environments where tickets are available.
 
 ## lastLogonTimestamp vs lastLogon
 

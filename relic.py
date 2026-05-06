@@ -140,11 +140,33 @@ def build_connection(args: argparse.Namespace) -> "Connection":
     conn = Connection(
         server,
         user=user,
-        password=args.password,
+        password=resolve_password(args),
         authentication=ldap3.NTLM if (args.domain and "\\" in (user or "")) else ldap3.SIMPLE,
         auto_bind=True,
     )
     return conn
+
+
+def resolve_password(args: argparse.Namespace) -> Optional[str]:
+    """Resolve the bind password from one approved source."""
+    sources = [
+        bool(getattr(args, "password", None)),
+        bool(getattr(args, "password_env", None)),
+        bool(getattr(args, "password_stdin", None)),
+    ]
+    if sum(sources) > 1:
+        _die("Use only one of --password, --password-env, or --password-stdin.")
+    if args.password_env:
+        value = os.environ.get(args.password_env)
+        if not value:
+            _die(f"Environment variable {args.password_env} is not set or empty.")
+        return value
+    if args.password_stdin:
+        value = sys.stdin.readline().rstrip("\r\n")
+        if not value:
+            _die("No password was read from stdin.")
+        return value
+    return args.password
 
 
 # ---------------------------------------------------------------------------
@@ -557,6 +579,10 @@ def parse_args(argv: Optional[List[str]] = None) -> argparse.Namespace:
                             help="Bind username. Prefix with DOMAIN\\ for NTLM.")
     conn_group.add_argument("-P", "--password", metavar="PASS",
                             help="Bind password.")
+    conn_group.add_argument("--password-env", metavar="VAR",
+                            help="Read bind password from environment variable VAR.")
+    conn_group.add_argument("--password-stdin", action="store_true",
+                            help="Read bind password from the first line of stdin.")
     conn_group.add_argument("--base-dn", metavar="DN",
                             help="Base DN for searches. Derived from --domain if not specified.")
     conn_group.add_argument("-p", "--port", type=int, default=DEFAULT_PORT, metavar="N",

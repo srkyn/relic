@@ -373,6 +373,24 @@ class ArgParseTests(unittest.TestCase):
         self.assertEqual(args.output, "out.json")
         self.assertEqual(args.output_csv, "out.csv")
 
+    def test_password_env_flag(self):
+        args = self._args(["--username", "svc_relic", "--password-env", "RELIC_BIND_PASSWORD"])
+        self.assertEqual(args.password_env, "RELIC_BIND_PASSWORD")
+
+    def test_resolve_password_from_env(self):
+        args = self._args(["--username", "svc_relic", "--password-env", "RELIC_BIND_PASSWORD"])
+        with unittest.mock.patch.dict(os.environ, {"RELIC_BIND_PASSWORD": "secret-value"}):
+            self.assertEqual(relic.resolve_password(args), "secret-value")
+
+    def test_rejects_multiple_password_sources(self):
+        args = self._args([
+            "--username", "svc_relic",
+            "--password", "inline",
+            "--password-env", "RELIC_BIND_PASSWORD",
+        ])
+        with self.assertRaises(SystemExit):
+            relic.resolve_password(args)
+
     def test_scan_targets(self):
         args = self._args(["--users", "--computers", "--disabled", "--never-expires"])
         self.assertTrue(args.users)

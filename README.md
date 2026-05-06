@@ -67,14 +67,22 @@ rl -s dc01.corp.local --domain corp.local --disable
 ## Authentication
 
 ```bash
-# Simple bind (username + password)
-rl -s dc01.corp.local --domain corp.local -u svc_relic -P <pass>
+# Simple bind (username + password from environment)
+export RELIC_BIND_PASSWORD="<pass>"
+rl -s dc01.corp.local --domain corp.local -u svc_relic --password-env RELIC_BIND_PASSWORD
 
 # NTLM
-rl -s dc01.corp.local -u "CORP\svc_relic" -P <pass> --base-dn "DC=corp,DC=local"
+rl -s dc01.corp.local -u "CORP\svc_relic" --password-env RELIC_BIND_PASSWORD --base-dn "DC=corp,DC=local"
 ```
 
-LDAPS (`--ssl` or `--port 636`) is recommended to avoid transmitting credentials in cleartext.
+PowerShell equivalent:
+
+```powershell
+$env:RELIC_BIND_PASSWORD = "<pass>"
+rl -s dc01.corp.local --domain corp.local -u svc_relic --password-env RELIC_BIND_PASSWORD
+```
+
+LDAPS (`--ssl` or `--port 636`) is recommended to avoid transmitting credentials in cleartext. `-P` still works for quick local testing, but `--password-env` or `--password-stdin` is safer for repeatable runs.
 
 ## Short Flags
 
@@ -83,6 +91,8 @@ LDAPS (`--ssl` or `--port 636`) is recommended to avoid transmitting credentials
 | `-s HOST` | `--server HOST` | Domain controller hostname or IP |
 | `-u USER` | `--username USER` | Bind username |
 | `-P PASS` | `--password PASS` | Bind password |
+|  | `--password-env VAR` | Read bind password from environment variable |
+|  | `--password-stdin` | Read bind password from stdin |
 | `-p N` | `--port N` | LDAP port (default: 389) |
 | `-d N` | `--days N` | Inactivity threshold in days |
 | `-U` | `--users` | Scan user accounts |
