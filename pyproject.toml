@@ -30,6 +30,7 @@ classifiers = [
 ]
 
 [project.scripts]
+rl = "relic:main"
 relic = "relic:main"
 
 [tool.setuptools]

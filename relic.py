@@ -537,7 +537,7 @@ def apply_action(
 
 def parse_args(argv: Optional[List[str]] = None) -> argparse.Namespace:
     parser = argparse.ArgumentParser(
-        prog="relic",
+        prog="rl",
         description=(
             "Surface stale and orphaned objects in on-premises Active Directory.\n"
             "Finds computer accounts that have stopped authenticating, dormant user\n"
@@ -549,45 +549,45 @@ def parse_args(argv: Optional[List[str]] = None) -> argparse.Namespace:
     parser.add_argument("--version", action="version", version=f"relic {VERSION}")
 
     conn_group = parser.add_argument_group("connection")
-    conn_group.add_argument("--server", required=True, metavar="HOST",
+    conn_group.add_argument("-s", "--server", required=True, metavar="HOST",
                             help="Domain controller hostname or IP address.")
     conn_group.add_argument("--domain", metavar="DOMAIN",
                             help="Domain name (e.g. corp.example.com). Used to derive base DN if --base-dn is not set.")
-    conn_group.add_argument("--username", metavar="USER",
+    conn_group.add_argument("-u", "--username", metavar="USER",
                             help="Bind username. Prefix with DOMAIN\\ for NTLM.")
-    conn_group.add_argument("--password", metavar="PASS",
+    conn_group.add_argument("-P", "--password", metavar="PASS",
                             help="Bind password.")
     conn_group.add_argument("--base-dn", metavar="DN",
                             help="Base DN for searches. Derived from --domain if not specified.")
-    conn_group.add_argument("--port", type=int, default=DEFAULT_PORT, metavar="N",
+    conn_group.add_argument("-p", "--port", type=int, default=DEFAULT_PORT, metavar="N",
                             help=f"LDAP port (default: {DEFAULT_PORT}).")
     conn_group.add_argument("--ssl", action="store_true",
                             help="Use LDAPS (TLS). Implied if --port 636.")
 
     scan_group = parser.add_argument_group("scan targets")
-    scan_group.add_argument("--users", action="store_true",
+    scan_group.add_argument("-U", "--users", action="store_true",
                             help="Scan for stale user accounts.")
-    scan_group.add_argument("--computers", action="store_true",
+    scan_group.add_argument("-C", "--computers", action="store_true",
                             help="Scan for stale computer accounts.")
     scan_group.add_argument("--disabled", action="store_true",
                             help="Find disabled accounts with group memberships.")
     scan_group.add_argument("--never-expires", action="store_true",
                             help="Find enabled accounts with non-expiring passwords.")
-    scan_group.add_argument("--days", type=int, default=DEFAULT_DAYS, metavar="N",
+    scan_group.add_argument("-d", "--days", type=int, default=DEFAULT_DAYS, metavar="N",
                             help=f"Inactivity threshold in days (default: {DEFAULT_DAYS}).")
 
     output_group = parser.add_argument_group("output")
-    output_group.add_argument("--output", metavar="FILE", help="Write JSON report to FILE.")
+    output_group.add_argument("-o", "--output", metavar="FILE", help="Write JSON report to FILE.")
     output_group.add_argument("--output-csv", metavar="FILE", help="Write CSV report to FILE.")
-    output_group.add_argument("--only-flagged", action="store_true",
+    output_group.add_argument("-F", "--only-flagged", action="store_true",
                               help="Show MEDIUM and HIGH risk objects only.")
-    output_group.add_argument("--quiet", action="store_true",
+    output_group.add_argument("-q", "--quiet", action="store_true",
                               help="Suppress table; print summary only.")
 
     action_group = parser.add_argument_group("actions")
     action_group.add_argument("--disable", action="store_true",
                               help="Disable flagged objects (sets ACCOUNTDISABLE flag).")
-    action_group.add_argument("--dry-run", action="store_true",
+    action_group.add_argument("-n", "--dry-run", action="store_true",
                               help="Report without making any changes.")
 
     return parser.parse_args(argv)
