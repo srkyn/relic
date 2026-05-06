@@ -40,42 +40,57 @@ Active Directory environments accumulate objects that nobody is actively managin
 
 ```bash
 # Full scan — all object types
+rl -s dc01.corp.local --domain corp.local
 relic --server dc01.corp.local --domain corp.local
 
 # Show only HIGH and MEDIUM findings
+rl -s dc01.corp.local --domain corp.local -F
 relic --server dc01.corp.local --domain corp.local --only-flagged
 
 # Adjust the inactivity threshold
-relic --server dc01.corp.local --domain corp.local --days 180
+rl -s dc01.corp.local --domain corp.local -d 180
 
 # Target specific object types
-relic --server dc01.corp.local --domain corp.local --users --disabled
+rl -s dc01.corp.local --domain corp.local -U --disabled
 
 # Write reports
-relic --server dc01.corp.local --domain corp.local --output results.json --output-csv results.csv
+rl -s dc01.corp.local --domain corp.local -o results.json --output-csv results.csv
 
 # Use LDAPS and an explicit base DN
-relic --server dc01.corp.local --ssl --base-dn "DC=corp,DC=local"
+rl -s dc01.corp.local --ssl --base-dn "DC=corp,DC=local"
 
 # Disable flagged objects (dry run first)
-relic --server dc01.corp.local --domain corp.local --disable --dry-run
-relic --server dc01.corp.local --domain corp.local --disable
+rl -s dc01.corp.local --domain corp.local --disable -n
+rl -s dc01.corp.local --domain corp.local --disable
 ```
 
 ## Authentication
 
 ```bash
 # Simple bind (username + password)
-relic --server dc01.corp.local --domain corp.local \
-      --username svc_relic --password <pass>
+rl -s dc01.corp.local --domain corp.local -u svc_relic -P <pass>
 
 # NTLM
-relic --server dc01.corp.local \
-      --username "CORP\svc_relic" --password <pass> \
-      --base-dn "DC=corp,DC=local"
+rl -s dc01.corp.local -u "CORP\svc_relic" -P <pass> --base-dn "DC=corp,DC=local"
 ```
 
 LDAPS (`--ssl` or `--port 636`) is recommended to avoid transmitting credentials in cleartext.
+
+## Short Flags
+
+| Short | Long | Description |
+|---|---|---|
+| `-s HOST` | `--server HOST` | Domain controller hostname or IP |
+| `-u USER` | `--username USER` | Bind username |
+| `-P PASS` | `--password PASS` | Bind password |
+| `-p N` | `--port N` | LDAP port (default: 389) |
+| `-d N` | `--days N` | Inactivity threshold in days |
+| `-U` | `--users` | Scan user accounts |
+| `-C` | `--computers` | Scan computer accounts |
+| `-o FILE` | `--output FILE` | Write JSON report to FILE |
+| `-F` | `--only-flagged` | Show MEDIUM and HIGH only |
+| `-q` | `--quiet` | Summary only, no table |
+| `-n` | `--dry-run` | Report without making changes |
 
 ## Scan Flags
 
@@ -97,7 +112,7 @@ JSON and CSV output includes: `name`, `type`, `dn`, `last_logon_str`, `age_days`
 git clone https://github.com/srkyn/relic.git
 cd relic
 pip install .
-relic --version
+rl --version
 ```
 
 Or run directly:
@@ -132,5 +147,5 @@ relic and [lapse](https://github.com/srkyn/lapse) solve the same class of proble
 ```bash
 python -m py_compile relic.py
 python -m unittest discover -s tests -v
-relic --version
+rl --version
 ```
