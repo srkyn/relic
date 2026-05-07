@@ -23,6 +23,17 @@ Active Directory environments accumulate objects that nobody is actively managin
 
 **Service accounts with aging passwords** — accounts with SPNs whose `pwdLastSet` is older than the threshold are flagged as Kerberoasting exposure. A service account with an SPN and a multi-year-old password is a target regardless of whether the account appears active.
 
+## Scan Flow
+
+```mermaid
+flowchart LR
+    LDAP["Domain controller<br/>LDAP or LDAPS bind"] --> Objects["Directory objects<br/>users, computers, disabled accounts, service accounts"]
+    Objects --> Signals["Hygiene signals<br/>last logon, password age, SPN, groups, flags"]
+    Signals --> Risk["Risk rules<br/>medium or high findings"]
+    Risk --> Reports["Review output<br/>terminal table, JSON, CSV"]
+    Reports --> Cleanup["Operator cleanup<br/>remove memberships, rotate passwords, disable stale objects"]
+```
+
 ## Risk Levels
 
 | Condition | Severity |
