@@ -8,7 +8,7 @@ The risk is concrete. A disabled account that still holds membership in privileg
 
 ## What relic Checks
 
-**Stale computer accounts** — computers whose `lastLogonTimestamp` attribute predates the threshold. Note that `lastLogonTimestamp` is replicated across domain controllers but is intentionally imprecise (it may lag by up to 14 days by default). Age readings should be interpreted as approximate.
+**Stale computer accounts** — computers whose `lastLogonTimestamp` attribute predates the threshold. Note that `lastLogonTimestamp` is replicated across domain controllers but imprecise by design (it may lag by up to 14 days by default). Age readings should be interpreted as approximate.
 
 **Dormant user accounts** — users who have not authenticated within the threshold window, identified by `lastLogonTimestamp`. Includes service accounts when `servicePrincipalName` is populated.
 
