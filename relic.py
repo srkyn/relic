@@ -19,9 +19,11 @@ from typing import Any, Dict, List, Optional, Tuple
 try:
     import ldap3
     from ldap3 import ALL_ATTRIBUTES, SUBTREE, Connection, Server
+    from ldap3.core.exceptions import LDAPException
     _HAS_LDAP3 = True
 except ImportError:
     _HAS_LDAP3 = False
+    LDAPException = RuntimeError
 
 try:
     from tabulate import tabulate
@@ -524,7 +526,7 @@ def disable_object(conn: "Connection", dn: str, dry_run: bool) -> bool:
         new_val = current | _UAC_DISABLED
         conn.modify(dn, {"userAccountControl": [(ldap3.MODIFY_REPLACE, [new_val])]})
         return conn.result["result"] == 0
-    except Exception:
+    except (LDAPException, ValueError, TypeError, KeyError, AttributeError):
         return False
 
 
@@ -646,7 +648,7 @@ def main(argv: Optional[List[str]] = None) -> int:
     print(f"Connecting to {args.server}:{args.port}...")
     try:
         conn = build_connection(args)
-    except Exception as exc:
+    except (LDAPException, OSError, ValueError) as exc:
         _die(f"LDAP connection failed: {exc}")
 
     print(f"Connected. Base DN: {base_dn}")
