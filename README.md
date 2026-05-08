@@ -11,6 +11,12 @@ Active Directory environments accumulate objects that nobody is actively managin
 ![Python](https://img.shields.io/badge/python-3.8%2B-1f6feb?style=flat-square)
 ![License](https://img.shields.io/github/license/srkyn/relic?style=flat-square)
 
+## Demo
+
+![Sanitized relic terminal output](docs/assets/relic-sample-output.svg)
+
+More context is available in [docs/demo.md](docs/demo.md).
+
 ## What It Finds
 
 **Stale computer accounts** — computers that have not authenticated since the threshold. Computer accounts authenticate when the machine starts and periodically during operation. A computer that has been silent for months either no longer exists or is no longer receiving policy.
@@ -150,6 +156,7 @@ relic and [lapse](https://github.com/srkyn/lapse) solve the same class of proble
 ## Files
 
 - `relic.py`: the scanner
+- `docs/demo.md`: sanitized example output and interpretation
 - `tests/test_relic.py`: unit tests (48 cases)
 - `docs/design-notes.md`: implementation details and limitations
 - `CHANGELOG.md`: release history

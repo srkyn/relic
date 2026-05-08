@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1180" height="430" viewBox="0 0 1180 430" role="img" aria-labelledby="title desc">
+  <title id="title">Sanitized relic terminal output</title>
+  <desc id="desc">Example relic output showing Active Directory hygiene findings.</desc>
+  <rect width="1180" height="430" rx="10" fill="#0f1720"/>
+  <rect x="0" y="0" width="1180" height="34" rx="10" fill="#182331"/>
+  <circle cx="22" cy="17" r="6" fill="#e06c75"/>
+  <circle cx="44" cy="17" r="6" fill="#e5c07b"/>
+  <circle cx="66" cy="17" r="6" fill="#98c379"/>
+  <text x="92" y="22" font-family="Consolas, monospace" font-size="13" fill="#b7c0cc">rl --server dc01.corp.local --domain corp.local --only-flagged</text>
+
+  <g font-family="Consolas, monospace" font-size="15" fill="#d6deeb">
+    <text x="28" y="66">Connecting to dc01.corp.local:389...</text>
+    <text x="28" y="96">Connected. Base DN: DC=corp,DC=local</text>
+    <text x="28" y="126">Threshold: 90 days (cutoff: 2026-01-08)</text>
+    <text x="28" y="166">Name              Type      Age  Pwd Age  Groups  Risk    Reason</text>
+    <text x="28" y="188">----------------  --------  ---  -------  ------  ------  -----------------------------------------</text>
+    <text x="28" y="218" fill="#f8d49b">svc-legacy-sql    user      642  642      4       HIGH    service account password unchanged</text>
+    <text x="28" y="248" fill="#f8d49b">j.smith           user      311  400      7       HIGH    disabled account with memberships</text>
+    <text x="28" y="278" fill="#ffd580">WS-OLD-144$       computer  221  221      1       MEDIUM  stale computer account</text>
+    <text x="28" y="308" fill="#ffd580">backup-runner     user      44   390      2       MEDIUM  password set to never expire</text>
+    <text x="28" y="354" fill="#8fa2b7">JSON written to results.json</text>
+    <text x="28" y="382" fill="#8fa2b7">CSV written to results.csv</text>
+  </g>
+</svg>
