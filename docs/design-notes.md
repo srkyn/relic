@@ -12,7 +12,7 @@ The risk is concrete. A disabled account that still holds membership in privileg
 
 **Dormant user accounts** — users who have not authenticated within the threshold window, identified by `lastLogonTimestamp`. Includes service accounts when `servicePrincipalName` is populated.
 
-**Disabled accounts with group memberships** — accounts with `ACCOUNTDISABLE` set in `userAccountControl` that still appear in `memberOf`. These are the most actionable findings: the account is already disabled, the group memberships are residual, and removing them carries essentially no risk.
+**Disabled accounts with group memberships** — accounts with `ACCOUNTDISABLE` set in `userAccountControl` that still appear in `memberOf`. These are the most actionable findings: the account is already disabled, the memberships may be residual, and cleanup should still be reviewed before changes are made.
 
 **Non-expiring passwords** — enabled accounts with `DONT_EXPIRE_PASSWORD` set in `userAccountControl`. Flagged on its own as MEDIUM; escalates to HIGH when the account is also stale.
 

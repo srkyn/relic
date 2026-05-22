@@ -23,7 +23,7 @@ More context is available in [docs/demo.md](docs/demo.md).
 
 **Dormant user accounts** — users who have not logged in within the threshold window. Includes service accounts identified by the presence of `servicePrincipalName`.
 
-**Disabled accounts with group memberships** — the most immediately actionable finding. The account is already disabled, but its group memberships are still live. Removing them carries no operational risk and closes a re-enablement path.
+**Disabled accounts with group memberships** — the most immediately actionable finding. The account is already disabled, but its group memberships are still live. Reviewing and removing unnecessary memberships closes a re-enablement path.
 
 **Accounts with non-expiring passwords** — `DONT_EXPIRE_PASSWORD` set in `userAccountControl`. Flagged on its own as MEDIUM; escalates to HIGH when the account is also stale.
 
