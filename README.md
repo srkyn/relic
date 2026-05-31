@@ -15,6 +15,8 @@ Active Directory environments accumulate objects that nobody is actively managin
 
 ![Sanitized relic terminal output](docs/assets/relic-sample-output.svg)
 
+In a synthetic 200-object Active Directory test environment, relic surfaced 12 HIGH findings: 4 disabled accounts still holding group memberships, 3 service accounts with SPNs and passwords unchanged beyond 365 days, and 5 computer accounts inactive beyond one year. An additional 9 MEDIUM findings covered accounts with non-expiring passwords and dormant users. Total scan time under 8 seconds over a local LDAP connection.
+
 More context is available in [docs/demo.md](docs/demo.md).
 
 ## What It Finds
