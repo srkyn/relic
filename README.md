@@ -2,9 +2,9 @@
 
 # relic
 
-Surface stale and orphaned objects in on-premises Active Directory.
+Find the Active Directory objects that stuck around longer than the process that created them.
 
-Active Directory environments accumulate objects that nobody is actively managing. Users leave, their accounts stay. Service accounts outlive the projects that created them. Workstations get decommissioned but their computer objects stay in the directory, still in scope for group policy and still appearing in security group memberships. relic connects to a domain controller over LDAP and tells you what's there, how old it is, and what risk it carries.
+Active Directory environments collect leftovers. Users leave, accounts stay. Service accounts outlive the projects that created them. Workstations get decommissioned, but their computer objects still sit in the directory, still in scope for policy and still appearing in group memberships. relic connects to a domain controller over LDAP and shows what is there, how old it is, and why it may deserve review.
 
 ![Release](https://img.shields.io/github/v/release/srkyn/relic?style=flat-square)
 ![CI](https://img.shields.io/github/actions/workflow/status/srkyn/relic/ci.yml?branch=main&style=flat-square)
